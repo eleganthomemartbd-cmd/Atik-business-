@@ -1,0 +1,7027 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>Atik Business Hisab</title>
+
+<style>
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#667085;
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --border:#e4e7ec;
+  --success:#16a34a;
+  --danger:#dc2626;
+  --warning:#d97706;
+  --sidebar:#111827;
+  --sidebar-hover:#26344d;
+  --shadow:0 4px 18px rgba(0,0,0,.06);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans Bengali",
+    Arial,
+    sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:255px;
+  background:var(--sidebar);
+  color:#fff;
+  z-index:100;
+  overflow-y:auto;
+  transition:.25s ease;
+}
+
+.brand{
+  padding:22px 18px;
+  border-bottom:1px solid #263041;
+  font-size:21px;
+  font-weight:800;
+}
+
+.brand small{
+  display:block;
+  margin-top:4px;
+  color:#9ca3af;
+  font-size:11px;
+  font-weight:500;
+}
+
+.nav{
+  padding:12px;
+}
+
+.nav button{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px;
+  margin:3px 0;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#cbd5e1;
+  text-align:left;
+  transition:.15s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:var(--sidebar-hover);
+  color:#fff;
+}
+
+/* MAIN */
+.main{
+  width:calc(100% - 255px);
+  margin-left:255px;
+  min-width:0;
+}
+
+.topbar{
+  height:68px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 22px;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.topbar h1{
+  margin:0;
+  font-size:20px;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.mobile-menu{
+  display:none;
+  background:transparent;
+  border:0;
+  font-size:23px;
+}
+
+.content{
+  padding:22px;
+}
+
+/* PAGE */
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* BUTTON */
+.btn{
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  background:#eef2f7;
+  color:var(--text);
+  font-weight:650;
+  transition:.15s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+.btn.primary:hover{
+  background:var(--primary-dark);
+}
+
+.btn.success{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.btn.danger{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.btn.warning{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+
+.stat .label{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.stat .value{
+  font-size:25px;
+  font-weight:800;
+  margin-top:7px;
+}
+
+/* SECTION */
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:20px 0 12px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:17px;
+}
+
+/* TABLE */
+.table-wrap{
+  overflow:auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+
+th,
+td{
+  padding:12px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  font-size:13px;
+}
+
+th{
+  background:#f8fafc;
+  color:#475467;
+  font-weight:750;
+}
+
+tr:last-child td{
+  border-bottom:0;
+}
+
+/* FORM */
+.formgrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:12px;
+  font-weight:700;
+  color:#475467;
+}
+
+.input,
+.select,
+.textarea{
+  width:100%;
+  padding:10px 11px;
+  border:1px solid #d0d5dd;
+  border-radius:8px;
+  background:#fff;
+  color:#111827;
+  outline:none;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+.textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+/* TOOLBAR */
+.toolbar{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.toolbar .input{
+  max-width:320px;
+}
+
+/* BADGE */
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:99px;
+  font-size:11px;
+  font-weight:700;
+  background:#eef2ff;
+  color:#3730a3;
+}
+
+.badge.green{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.badge.red{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.badge.yellow{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+/* GRID */
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.report-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.65);
+  z-index:500;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(850px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:var(--card);
+  border-radius:15px;
+  padding:20px;
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.modal-head h3{
+  margin:0;
+}
+
+.close{
+  width:35px;
+  height:35px;
+  border:0;
+  border-radius:50%;
+  background:#eef2f7;
+  font-size:20px;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+}
+
+/* TOTAL */
+.totalbox{
+  border-top:1px dashed var(--border);
+  margin-top:12px;
+  padding-top:12px;
+}
+
+.totalrow{
+  display:flex;
+  justify-content:space-between;
+  margin:7px 0;
+}
+
+.grand{
+  font-size:20px;
+  font-weight:800;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  background:#111827;
+  color:#fff;
+  padding:12px 15px;
+  border-radius:9px;
+  display:none;
+  z-index:1000;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.toast.show{
+  display:block;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.success-text{
+  color:var(--success);
+}
+
+.danger-text{
+  color:var(--danger);
+}
+
+/* DARK MODE */
+body.dark{
+  --bg:#0b1020;
+  --card:#111827;
+  --text:#f3f4f6;
+  --muted:#9ca3af;
+  --border:#263244;
+  --sidebar:#070b14;
+}
+
+body.dark th{
+  background:#172033;
+  color:#cbd5e1;
+}
+
+body.dark .input,
+body.dark .select,
+body.dark .textarea{
+  background:#0f172a;
+  color:#fff;
+  border-color:#334155;
+}
+
+body.dark .btn{
+  background:#1f2937;
+  color:#fff;
+}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .report-cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:800px){
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    width:100%;
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .quick{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .topbar{
+    padding:0 12px;
+  }
+
+  .content{
+    padding:12px;
+  }
+}
+
+@media(max-width:550px){
+  .cards{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .card{
+    padding:13px;
+  }
+
+  .stat .value{
+    font-size:19px;
+  }
+
+  .formgrid{
+    grid-template-columns:1fr;
+  }
+
+  .quick{
+    grid-template-columns:1fr;
+  }
+
+  .report-cards{
+    grid-template-columns:1fr;
+  }
+
+  .topbar h1{
+    font-size:16px;
+  }
+
+  .top-actions .hide-mobile{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    Atik Business Hisab
+    <small>Accounting & Inventory Management</small>
+  </div>
+
+  <nav class="nav">
+
+    <button class="active" data-page="dashboard">
+      📊 Dashboard
+    </button>
+
+    <button data-page="sales">
+      🛒 Sales / POS
+    </button>
+
+    <button data-page="purchases">
+      📥 Purchases
+    </button>
+
+    <button data-page="products">
+      📦 Products & Stock
+    </button>
+
+    <button data-page="customers">
+      👥 Customers
+    </button>
+
+    <button data-page="suppliers">
+      🏭 Suppliers
+    </button>
+
+    <button data-page="expenses">
+      💸 Expenses
+    </button>
+
+    <button data-page="cashbank">
+      🏦 Cash & Bank
+    </button>
+
+    <button data-page="orders">
+      📋 Orders
+    </button>
+
+    <button data-page="reports">
+      📈 Reports
+    </button>
+
+    <button data-page="settings">
+      ⚙️ Settings
+    </button>
+
+  </nav>
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+  <div class="top-actions">
+    <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+    <h1 id="pageTitle">Dashboard</h1>
+  </div>
+
+  <div class="top-actions">
+    <span id="businessNameTop" class="muted"></span>
+
+    <button class="btn hide-mobile" onclick="toggleTheme()">
+      🌙 Theme
+    </button>
+
+    <button class="btn primary" onclick="openSale()">
+      + New Sale
+    </button>
+  </div>
+
+</header>
+
+
+<div class="content">
+
+<!-- DASHBOARD -->
+<section class="page active" id="page-dashboard">
+
+  <div class="cards">
+
+    <div class="card stat">
+      <div class="label">Today's Sales</div>
+      <div class="value" id="dSales">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Today's Purchases</div>
+      <div class="value" id="dPurchases">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Today's Expenses</div>
+      <div class="value" id="dExpenses">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Today's Profit</div>
+      <div class="value" id="dProfit">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Receivable</div>
+      <div class="value" id="dReceivable">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Payable</div>
+      <div class="value" id="dPayable">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Cash Balance</div>
+      <div class="value" id="dCash">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Bank Balance</div>
+      <div class="value" id="dBank">৳0.00</div>
+    </div>
+
+  </div>
+
+
+  <div class="section-head">
+    <h2>Quick Actions</h2>
+  </div>
+
+  <div class="card quick">
+
+    <button class="btn primary" onclick="openSale()">
+      🛒 New Sale
+    </button>
+
+    <button class="btn" onclick="openPurchase()">
+      📥 New Purchase
+    </button>
+
+    <button class="btn" onclick="openProduct()">
+      📦 Add Product
+    </button>
+
+    <button class="btn" onclick="openCustomer()">
+      👤 Add Customer
+    </button>
+
+    <button class="btn" onclick="openSupplier()">
+      🏭 Add Supplier
+    </button>
+
+    <button class="btn" onclick="openExpense()">
+      💸 Add Expense
+    </button>
+
+  </div>
+
+
+  <div class="grid2">
+
+    <div>
+
+      <div class="section-head">
+        <h2>Recent Sales</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="recentSales"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    <div>
+
+      <div class="section-head">
+        <h2>Low Stock</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Stock</th>
+              <th>Minimum</th>
+            </tr>
+          </thead>
+
+          <tbody id="lowStock"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SALES -->
+<section class="page" id="page-sales">
+
+  <div class="section-head">
+    <h2>Sales / POS</h2>
+
+    <button class="btn primary" onclick="openSale()">
+      + New Sale
+    </button>
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      class="input"
+      id="salesSearch"
+      placeholder="Search invoice/customer..."
+      oninput="renderSales()"
+    >
+
+    <input
+      class="input"
+      type="date"
+      id="salesDate"
+      onchange="renderSales()"
+    >
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Invoice</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Total</th>
+          <th>Paid</th>
+          <th>Due</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="salesTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- PURCHASE -->
+<section class="page" id="page-purchases">
+
+  <div class="section-head">
+    <h2>Purchases</h2>
+
+    <button class="btn primary" onclick="openPurchase()">
+      + New Purchase
+    </button>
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      class="input"
+      id="purchaseSearch"
+      placeholder="Search supplier..."
+      oninput="renderPurchases()"
+    >
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Purchase ID</th>
+          <th>Date</th>
+          <th>Supplier</th>
+          <th>Total</th>
+          <th>Paid</th>
+          <th>Due</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody id="purchaseTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+<section class="page" id="page-products">
+
+  <div class="section-head">
+    <h2>Products & Inventory</h2>
+
+    <button class="btn primary" onclick="openProduct()">
+      + Add Product
+    </button>
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      class="input"
+      id="productSearch"
+      placeholder="Search product/barcode..."
+      oninput="renderProducts()"
+    >
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Barcode</th>
+          <th>Category</th>
+          <th>Buy</th>
+          <th>Sell</th>
+          <th>Stock</th>
+          <th>Min</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="productsTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- CUSTOMERS -->
+<section class="page" id="page-customers">
+
+  <div class="section-head">
+    <h2>Customers & Receivable</h2>
+
+    <button class="btn primary" onclick="openCustomer()">
+      + Add Customer
+    </button>
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Opening Due</th>
+          <th>Current Due</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="customersTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- SUPPLIERS -->
+<section class="page" id="page-suppliers">
+
+  <div class="section-head">
+    <h2>Suppliers & Payable</h2>
+
+    <button class="btn primary" onclick="openSupplier()">
+      + Add Supplier
+    </button>
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Opening Payable</th>
+          <th>Current Payable</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="suppliersTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- EXPENSE -->
+<section class="page" id="page-expenses">
+
+  <div class="section-head">
+
+    <h2>Expenses</h2>
+
+    <button class="btn primary" onclick="openExpense()">
+      + Add Expense
+    </button>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Note</th>
+          <th>Amount</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+
+      <tbody id="expensesTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- CASH BANK -->
+<section class="page" id="page-cashbank">
+
+  <div class="cards">
+
+    <div class="card stat">
+      <div class="label">Cash</div>
+      <div class="value" id="cashPage">৳0.00</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Bank</div>
+      <div class="value" id="bankPage">৳0.00</div>
+    </div>
+
+  </div>
+
+
+  <div class="section-head">
+
+    <h2>Cash / Bank Transactions</h2>
+
+    <button class="btn primary" onclick="openMoney()">
+      + Transaction
+    </button>
+
+  </div>
+
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Account</th>
+          <th>Type</th>
+          <th>Note</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+
+      <tbody id="moneyTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- ORDERS -->
+<section class="page" id="page-orders">
+
+  <div class="grid2">
+
+    <div class="card">
+
+      <div class="section-head">
+
+        <h2>Sales Orders</h2>
+
+        <button class="btn primary" onclick="openOrder('sales')">
+          + Order
+        </button>
+
+      </div>
+
+      <div id="salesOrders"></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="section-head">
+
+        <h2>Purchase Orders</h2>
+
+        <button class="btn primary" onclick="openOrder('purchase')">
+          + Order
+        </button>
+
+      </div>
+
+      <div id="purchaseOrders"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- REPORTS -->
+<section class="page" id="page-reports">
+
+  <div class="section-head">
+    <h2>Reports</h2>
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      class="input"
+      type="date"
+      id="reportFrom"
+    >
+
+    <input
+      class="input"
+      type="date"
+      id="reportTo"
+    >
+
+    <button
+      class="btn primary"
+      onclick="renderReports()"
+    >
+      Generate
+    </button>
+
+    <button
+      class="btn"
+      onclick="exportCSV()"
+    >
+      Export CSV
+    </button>
+
+    <button
+      class="btn"
+      onclick="backup()"
+    >
+      JSON Backup
+    </button>
+
+  </div>
+
+
+  <div class="report-cards">
+
+    <div class="card stat">
+      <div class="label">Sales</div>
+      <div class="value" id="rSales">৳0</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Purchases</div>
+      <div class="value" id="rPurchases">৳0</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Expenses</div>
+      <div class="value" id="rExpenses">৳0</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Gross Profit</div>
+      <div class="value" id="rGross">৳0</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Net Profit</div>
+      <div class="value" id="rNet">৳0</div>
+    </div>
+
+    <div class="card stat">
+      <div class="label">Stock Value</div>
+      <div class="value" id="rStock">৳0</div>
+    </div>
+
+  </div>
+
+
+  <div class="section-head">
+    <h2>Report Details</h2>
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+
+      <tbody id="reportDetails"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- SETTINGS -->
+<section class="page" id="page-settings">
+
+  <div class="card">
+
+    <h2>Business Settings</h2>
+
+    <div class="formgrid">
+
+      <div class="field">
+        <label>Business Name</label>
+        <input class="input" id="setName">
+      </div>
+
+      <div class="field">
+        <label>Phone</label>
+        <input class="input" id="setPhone">
+      </div>
+
+      <div class="field">
+        <label>Address</label>
+        <input class="input" id="setAddress">
+      </div>
+
+      <div class="field">
+        <label>Currency</label>
+
+        <select class="select" id="setCurrency">
+          <option value="BDT">BDT (৳)</option>
+          <option value="USD">USD ($)</option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn primary"
+        onclick="saveSettings()"
+      >
+        Save Settings
+      </button>
+
+      <button
+        class="btn"
+        onclick="document.getElementById('restoreFile').click()"
+      >
+        Restore JSON
+      </button>
+
+      <input
+        hidden
+        type="file"
+        id="restoreFile"
+        accept=".json"
+        onchange="restore(event)"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="card" style="margin-top:15px">
+
+    <h2>Firebase</h2>
+
+    <p class="muted">
+      এই HTML version সরাসরি browser-এর local storage ব্যবহার করে।
+      Firebase-এর সাথে যুক্ত করতে আপনার Firebase project-এর configuration
+      এবং Authentication/Realtime Database integration পরে যোগ করা যাবে।
+    </p>
+
+  </div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h3 id="modalTitle">Form</h3>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div id="modalBody"></div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   ATIK BUSINESS HISAB
+   SINGLE FILE ACCOUNTING SYSTEM
+   ========================================================= */
+
+const STORAGE_KEY = "atik_business_hisab_v2";
+
+const today = () =>
+  new Date().toISOString().slice(0,10);
+
+const uid = (prefix="ID") =>
+  prefix + "_" +
+  Date.now().toString(36) +
+  "_" +
+  Math.random().toString(36).slice(2,8);
+
+let db = loadDB();
+
+
+/* =========================
+   DATABASE
+   ========================= */
+
+function defaultDB(){
+
+  return {
+
+    profile:{
+      name:"Atik Business Hisab",
+      phone:"",
+      address:"",
+      currency:"BDT",
+      openingCash:0,
+      openingBank:0
+    },
+
+    settings:{
+      currency:"BDT"
+    },
+
+    products:[],
+    customers:[],
+    suppliers:[],
+
+    sales:[],
+    purchases:[],
+    expenses:[],
+
+    payments:[],
+
+    cashTransactions:[],
+    bankTransactions:[],
+
+    salesReturns:[],
+    purchaseReturns:[],
+
+    salesOrders:[],
+    purchaseOrders:[],
+
+    stockAdjustments:[],
+
+    invoices:[],
+
+    auditHistory:[],
+
+    users:[
+      {
+        id:"owner",
+        name:"Owner",
+        role:"owner"
+      }
+    ]
+
+  };
+
+}
+
+
+function loadDB(){
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+      );
+
+    return data || defaultDB();
+
+  }catch(error){
+
+    return defaultDB();
+
+  }
+
+}
+
+
+function saveDB(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(db)
+  );
+
+  renderAll();
+
+}
+
+
+function toast(message){
+
+  const box =
+    document.getElementById("toast");
+
+  box.textContent = message;
+
+  box.classList.add("show");
+
+  setTimeout(()=>{
+    box.classList.remove("show");
+  },2300);
+
+}
+
+
+function safe(number){
+
+  return Math.max(
+    0,
+    Number(number) || 0
+  );
+
+}
+
+
+function money(number){
+
+  const currency =
+    db.settings.currency === "USD"
+      ? "$"
+      : "৳";
+
+  return currency +
+    Number(number || 0)
+      .toLocaleString(
+        "en-US",
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      );
+
+}
+
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g, char => {
+
+      const map = {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      };
+
+      return map[char];
+
+    });
+
+}
+
+
+/* =========================
+   HELPERS
+   ========================= */
+
+function getProduct(id){
+
+  return db.products.find(
+    product => product.id === id
+  );
+
+}
+
+
+function getCustomer(id){
+
+  return db.customers.find(
+    customer => customer.id === id
+  );
+
+}
+
+
+function getSupplier(id){
+
+  return db.suppliers.find(
+    supplier => supplier.id === id
+  );
+
+}
+
+
+/* =========================
+   AUDIT
+   ========================= */
+
+function audit(action, reference=""){
+
+  db.auditHistory.push({
+
+    id:uid("AUD"),
+
+    action,
+
+    date:new Date().toISOString(),
+
+    userId:"owner",
+
+    refId:reference
+
+  });
+
+}
+
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+document
+  .querySelectorAll(".nav button")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        showPage(
+          button.dataset.page
+        );
+
+      }
+    );
+
+  });
+
+
+function showPage(page){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(section =>
+      section.classList.remove("active")
+    );
+
+  const target =
+    document.getElementById(
+      "page-" + page
+    );
+
+  if(target)
+    target.classList.add("active");
+
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.page === page
+      );
+
+    });
+
+
+  const activeButton =
+    document.querySelector(
+      `.nav button[data-page="${page}"]`
+    );
+
+  if(activeButton){
+
+    document.getElementById(
+      "pageTitle"
+    ).textContent =
+      activeButton.textContent.trim();
+
+  }
+
+  document
+    .getElementById("sidebar")
+    .classList.remove("open");
+
+  renderAll();
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+/* =========================
+   THEME
+   ========================= */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "atik_theme",
+    document.body.classList.contains("dark")
+      ? "dark"
+      : "light"
+  );
+
+}
+
+
+if(
+  localStorage.getItem("atik_theme")
+  === "dark"
+){
+
+  document.body.classList.add("dark");
+
+}
+
+
+/* =========================
+   CUSTOMER DUE
+   ========================= */
+
+function customerDue(customer){
+
+  let due =
+    safe(customer.openingDue);
+
+  db.sales
+    .filter(
+      sale =>
+        sale.customerId === customer.id &&
+        sale.status !== "cancelled"
+    )
+    .forEach(
+      sale => {
+        due += safe(sale.due);
+      }
+    );
+
+
+  db.payments
+    .filter(
+      payment =>
+        payment.type === "customer_payment" &&
+        payment.partyId === customer.id
+    )
+    .forEach(
+      payment => {
+        due -= safe(payment.amount);
+      }
+    );
+
+
+  return Math.max(0,due);
+
+}
+
+
+/* =========================
+   SUPPLIER DUE
+   ========================= */
+
+function supplierDue(supplier){
+
+  let due =
+    safe(supplier.openingPayable);
+
+  db.purchases
+    .filter(
+      purchase =>
+        purchase.supplierId === supplier.id &&
+        purchase.status !== "cancelled"
+    )
+    .forEach(
+      purchase => {
+        due += safe(purchase.due);
+      }
+    );
+
+
+  db.payments
+    .filter(
+      payment =>
+        payment.type === "supplier_payment" &&
+        payment.partyId === supplier.id
+    )
+    .forEach(
+      payment => {
+        due -= safe(payment.amount);
+      }
+    );
+
+
+  return Math.max(0,due);
+
+}
+
+
+/* =========================
+   STOCK
+   ========================= */
+
+function productStock(product){
+
+  let stock =
+    safe(product.openingStock);
+
+
+  db.purchases
+    .filter(
+      purchase =>
+        purchase.status !== "cancelled"
+    )
+    .forEach(
+      purchase => {
+
+        purchase.items.forEach(
+          item => {
+
+            if(
+              item.productId === product.id
+            ){
+
+              stock += safe(item.qty);
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+  db.sales
+    .filter(
+      sale =>
+        sale.status !== "cancelled"
+    )
+    .forEach(
+      sale => {
+
+        sale.items.forEach(
+          item => {
+
+            if(
+              item.productId === product.id
+            ){
+
+              stock -= safe(item.qty);
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+  db.salesReturns
+    .forEach(
+      ret => {
+
+        ret.items.forEach(
+          item => {
+
+            if(
+              item.productId === product.id
+            ){
+
+              stock += safe(item.qty);
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+  db.purchaseReturns
+    .forEach(
+      ret => {
+
+        ret.items.forEach(
+          item => {
+
+            if(
+              item.productId === product.id
+            ){
+
+              stock -= safe(item.qty);
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+  db.stockAdjustments
+    .forEach(
+      adjustment => {
+
+        if(
+          adjustment.productId === product.id
+        ){
+
+          if(
+            adjustment.type === "increase"
+          ){
+
+            stock +=
+              safe(adjustment.quantity);
+
+          }else{
+
+            stock -=
+              safe(adjustment.quantity);
+
+          }
+
+        }
+
+      }
+    );
+
+
+  return Math.max(0,stock);
+
+}
+
+
+/* =========================
+   COGS
+   ========================= */
+
+function saleCOGS(sale){
+
+  return sale.items.reduce(
+    (total,item) => {
+
+      const product =
+        getProduct(item.productId);
+
+      return total +
+        safe(item.qty) *
+        safe(product?.purchasePrice);
+
+    },
+    0
+  );
+
+}
+
+
+/* =========================
+   SALES TOTAL
+   ========================= */
+
+function totalSales(filter=()=>true){
+
+  return db.sales
+    .filter(
+      sale =>
+        sale.status !== "cancelled" &&
+        filter(sale)
+    )
+    .reduce(
+      (total,sale) =>
+        total + safe(sale.total),
+      0
+    );
+
+}
+
+
+/* =========================
+   PURCHASE TOTAL
+   ========================= */
+
+function totalPurchases(filter=()=>true){
+
+  return db.purchases
+    .filter(
+      purchase =>
+        purchase.status !== "cancelled" &&
+        filter(purchase)
+    )
+    .reduce(
+      (total,purchase) =>
+        total + safe(purchase.total),
+      0
+    );
+
+}
+
+
+/* =========================
+   EXPENSE TOTAL
+   ========================= */
+
+function totalExpenses(filter=()=>true){
+
+  return db.expenses
+    .filter(filter)
+    .reduce(
+      (total,expense) =>
+        total + safe(expense.amount),
+      0
+    );
+
+}
+
+
+/* =========================
+   GROSS PROFIT
+   ========================= */
+
+function grossProfit(filter=()=>true){
+
+  return db.sales
+    .filter(
+      sale =>
+        sale.status !== "cancelled" &&
+        filter(sale)
+    )
+    .reduce(
+      (total,sale) =>
+        total +
+        safe(sale.total) -
+        saleCOGS(sale),
+      0
+    );
+
+}
+
+
+/* =========================
+   RECEIVABLE
+   ========================= */
+
+function totalReceivable(){
+
+  return db.customers.reduce(
+    (total,customer) =>
+      total + customerDue(customer),
+    0
+  );
+
+}
+
+
+/* =========================
+   PAYABLE
+   ========================= */
+
+function totalPayable(){
+
+  return db.suppliers.reduce(
+    (total,supplier) =>
+      total + supplierDue(supplier),
+    0
+  );
+
+}
+
+
+/* =========================
+   CASH
+   ========================= */
+
+function cashBalance(){
+
+  let balance =
+    safe(db.profile.openingCash);
+
+
+  db.sales
+    .filter(
+      sale =>
+        sale.status !== "cancelled" &&
+        sale.paymentMethod === "cash"
+    )
+    .forEach(
+      sale => {
+        balance += safe(sale.paid);
+      }
+    );
+
+
+  db.purchases
+    .filter(
+      purchase =>
+        purchase.status !== "cancelled" &&
+        purchase.paymentMethod === "cash"
+    )
+    .forEach(
+      purchase => {
+        balance -= safe(purchase.paid);
+      }
+    );
+
+
+  db.expenses
+    .filter(
+      expense =>
+        expense.method === "cash"
+    )
+    .forEach(
+      expense => {
+        balance -= safe(expense.amount);
+      }
+    );
+
+
+  db.payments.forEach(
+    payment => {
+
+      if(payment.method !== "cash")
+        return;
+
+      if(
+        payment.type === "customer_payment" ||
+        payment.type === "income"
+      ){
+
+        balance +=
+          safe(payment.amount);
+
+      }
+
+      if(
+        payment.type === "supplier_payment" ||
+        payment.type === "expense"
+      ){
+
+        balance -=
+          safe(payment.amount);
+
+      }
+
+    }
+  );
+
+
+  db.cashTransactions.forEach(
+    transaction => {
+
+      if(transaction.type === "in"){
+
+        balance +=
+          safe(transaction.amount);
+
+      }else{
+
+        balance -=
+          safe(transaction.amount);
+
+      }
+
+    }
+  );
+
+
+  return balance;
+
+}
+
+
+/* =========================
+   BANK
+   ========================= */
+
+function bankBalance(){
+
+  let balance =
+    safe(db.profile.openingBank);
+
+
+  db.sales
+    .filter(
+      sale =>
+        sale.status !== "cancelled" &&
+        sale.paymentMethod === "bank"
+    )
+    .forEach(
+      sale => {
+        balance += safe(sale.paid);
+      }
+    );
+
+
+  db.purchases
+    .filter(
+      purchase =>
+        purchase.status !== "cancelled" &&
+        purchase.paymentMethod === "bank"
+    )
+    .forEach(
+      purchase => {
+        balance -= safe(purchase.paid);
+      }
+    );
+
+
+  db.expenses
+    .filter(
+      expense =>
+        expense.method === "bank"
+    )
+    .forEach(
+      expense => {
+        balance -= safe(expense.amount);
+      }
+    );
+
+
+  db.payments.forEach(
+    payment => {
+
+      if(payment.method !== "bank")
+        return;
+
+      if(
+        payment.type === "customer_payment" ||
+        payment.type === "income"
+      ){
+
+        balance +=
+          safe(payment.amount);
+
+      }
+
+      if(
+        payment.type === "supplier_payment" ||
+        payment.type === "expense"
+      ){
+
+        balance -=
+          safe(payment.amount);
+
+      }
+
+    }
+  );
+
+
+  db.bankTransactions.forEach(
+    transaction => {
+
+      if(
+        transaction.type === "deposit"
+      ){
+
+        balance +=
+          safe(transaction.amount);
+
+      }else{
+
+        balance -=
+          safe(transaction.amount);
+
+      }
+
+    }
+  );
+
+
+  return balance;
+
+}
+
+
+/* =========================
+   DASHBOARD
+   ========================= */
+
+function renderDashboard(){
+
+  const todayFilter =
+    sale =>
+      sale.date?.slice(0,10) === today();
+
+
+  document.getElementById(
+    "dSales"
+  ).textContent =
+    money(totalSales(todayFilter));
+
+
+  document.getElementById(
+    "dPurchases"
+  ).textContent =
+    money(
+      totalPurchases(
+        purchase =>
+          purchase.date?.slice(0,10)
+          === today()
+      )
+    );
+
+
+  document.getElementById(
+    "dExpenses"
+  ).textContent =
+    money(
+      totalExpenses(
+        expense =>
+          expense.date === today()
+      )
+    );
+
+
+  document.getElementById(
+    "dProfit"
+  ).textContent =
+    money(
+      grossProfit(todayFilter) -
+      totalExpenses(
+        expense =>
+          expense.date === today()
+      )
+    );
+
+
+  document.getElementById(
+    "dReceivable"
+  ).textContent =
+    money(totalReceivable());
+
+
+  document.getElementById(
+    "dPayable"
+  ).textContent =
+    money(totalPayable());
+
+
+  document.getElementById(
+    "dCash"
+  ).textContent =
+    money(cashBalance());
+
+
+  document.getElementById(
+    "dBank"
+  ).textContent =
+    money(bankBalance());
+
+
+  const recent =
+    db.sales
+      .slice()
+      .reverse()
+      .slice(0,6);
+
+
+  document.getElementById(
+    "recentSales"
+  ).innerHTML =
+    recent.length
+      ? recent.map(
+          sale => `
+          <tr>
+            <td>${esc(sale.invoiceNo)}</td>
+            <td>
+              ${esc(
+                getCustomer(
+                  sale.customerId
+                )?.name || "Walk-in"
+              )}
+            </td>
+            <td>${money(sale.total)}</td>
+            <td>
+              <span class="badge ${
+                sale.status === "cancelled"
+                  ? "red"
+                  : "green"
+              }">
+                ${esc(sale.status)}
+              </span>
+            </td>
+          </tr>
+          `
+        ).join("")
+      : `
+        <tr>
+          <td colspan="4" class="empty">
+            No sales yet
+          </td>
+        </tr>
+      `;
+
+
+  const lowStock =
+    db.products.filter(
+      product =>
+        productStock(product) <=
+        safe(product.minimumStock)
+    );
+
+
+  document.getElementById(
+    "lowStock"
+  ).innerHTML =
+    lowStock.length
+      ? lowStock.map(
+          product => `
+          <tr>
+            <td>${esc(product.name)}</td>
+            <td class="danger-text">
+              ${productStock(product)}
+            </td>
+            <td>
+              ${product.minimumStock || 0}
+            </td>
+          </tr>
+          `
+        ).join("")
+      : `
+        <tr>
+          <td colspan="3" class="empty">
+            No low-stock products
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   SALES LIST
+   ========================= */
+
+function renderSales(){
+
+  const search =
+    (
+      document.getElementById(
+        "salesSearch"
+      )?.value || ""
+    ).toLowerCase();
+
+
+  const selectedDate =
+    document.getElementById(
+      "salesDate"
+    )?.value || "";
+
+
+  const sales =
+    db.sales
+      .slice()
+      .reverse()
+      .filter(
+        sale => {
+
+          const customer =
+            getCustomer(
+              sale.customerId
+            )?.name || "walk-in";
+
+
+          return (
+
+            (
+              !search ||
+              sale.invoiceNo
+                .toLowerCase()
+                .includes(search) ||
+              customer
+                .toLowerCase()
+                .includes(search)
+            )
+
+            &&
+
+            (
+              !selectedDate ||
+              sale.date
+                .slice(0,10)
+                === selectedDate
+            )
+
+          );
+
+        }
+      );
+
+
+  document.getElementById(
+    "salesTable"
+  ).innerHTML =
+    sales.length
+      ? sales.map(
+          sale => `
+          <tr>
+
+            <td>${esc(sale.invoiceNo)}</td>
+
+            <td>
+              ${sale.date.slice(0,10)}
+            </td>
+
+            <td>
+              ${esc(
+                getCustomer(
+                  sale.customerId
+                )?.name || "Walk-in"
+              )}
+            </td>
+
+            <td>${money(sale.total)}</td>
+
+            <td>${money(sale.paid)}</td>
+
+            <td>${money(sale.due)}</td>
+
+            <td>
+              <span class="badge ${
+                sale.status === "cancelled"
+                  ? "red"
+                  : "green"
+              }">
+                ${esc(sale.status)}
+              </span>
+            </td>
+
+            <td>
+
+              ${
+                sale.status !== "cancelled"
+                  ? `
+                    <button
+                      class="btn danger"
+                      onclick="cancelSale('${sale.id}')"
+                    >
+                      Cancel
+                    </button>
+                  `
+                  : "—"
+              }
+
+              <button
+                class="btn"
+                onclick="printInvoice('${sale.id}')"
+              >
+                Print
+              </button>
+
+            </td>
+
+          </tr>
+          `
+        ).join("")
+      : `
+        <tr>
+          <td colspan="8" class="empty">
+            No sales found
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   PURCHASE LIST
+   ========================= */
+
+function renderPurchases(){
+
+  const search =
+    (
+      document.getElementById(
+        "purchaseSearch"
+      )?.value || ""
+    ).toLowerCase();
+
+
+  const purchases =
+    db.purchases
+      .slice()
+      .reverse()
+      .filter(
+        purchase => {
+
+          const supplier =
+            getSupplier(
+              purchase.supplierId
+            )?.name || "";
+
+
+          return (
+            !search ||
+            supplier
+              .toLowerCase()
+              .includes(search)
+          );
+
+        }
+      );
+
+
+  document.getElementById(
+    "purchaseTable"
+  ).innerHTML =
+    purchases.length
+      ? purchases.map(
+          purchase => `
+          <tr>
+
+            <td>${esc(purchase.id)}</td>
+
+            <td>
+              ${purchase.date.slice(0,10)}
+            </td>
+
+            <td>
+              ${esc(
+                getSupplier(
+                  purchase.supplierId
+                )?.name || ""
+              )}
+            </td>
+
+            <td>${money(purchase.total)}</td>
+
+            <td>${money(purchase.paid)}</td>
+
+            <td>${money(purchase.due)}</td>
+
+            <td>
+              <span class="badge green">
+                ${esc(purchase.status)}
+              </span>
+            </td>
+
+          </tr>
+          `
+        ).join("")
+      : `
+        <tr>
+          <td colspan="7" class="empty">
+            No purchases found
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   PRODUCTS
+   ========================= */
+
+function renderProducts(){
+
+  const search =
+    (
+      document.getElementById(
+        "productSearch"
+      )?.value || ""
+    ).toLowerCase();
+
+
+  const products =
+    db.products.filter(
+      product =>
+        !search ||
+        product.name
+          .toLowerCase()
+          .includes(search) ||
+        (
+          product.barcode || ""
+        )
+          .toLowerCase()
+          .includes(search)
+    );
+
+
+  document.getElementById(
+    "productsTable"
+  ).innerHTML =
+    products.length
+      ? products.map(
+          product => {
+
+            const stock =
+              productStock(product);
+
+            const low =
+              stock <=
+              safe(product.minimumStock);
+
+
+            return `
+            <tr>
+
+              <td>
+                ${esc(product.name)}
+              </td>
+
+              <td>
+                ${esc(product.barcode || "")}
+              </td>
+
+              <td>
+                ${esc(product.category || "")}
+              </td>
+
+              <td>
+                ${money(product.purchasePrice)}
+              </td>
+
+              <td>
+                ${money(product.sellingPrice)}
+              </td>
+
+              <td>
+                ${stock}
+              </td>
+
+              <td>
+                ${product.minimumStock || 0}
+              </td>
+
+              <td>
+                <span class="badge ${
+                  low ? "red" : "green"
+                }">
+                  ${low ? "Low" : "OK"}
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn"
+                  onclick="openProduct('${product.id}')"
+                >
+                  Edit
+                </button>
+              </td>
+
+            </tr>
+            `;
+
+          }
+        ).join("")
+      : `
+        <tr>
+          <td colspan="9" class="empty">
+            No products
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   CUSTOMERS
+   ========================= */
+
+function renderCustomers(){
+
+  document.getElementById(
+    "customersTable"
+  ).innerHTML =
+    db.customers.length
+      ? db.customers.map(
+          customer => {
+
+            const due =
+              customerDue(customer);
+
+
+            return `
+            <tr>
+
+              <td>
+                ${esc(customer.name)}
+              </td>
+
+              <td>
+                ${esc(customer.phone || "")}
+              </td>
+
+              <td>
+                ${money(customer.openingDue)}
+              </td>
+
+              <td class="${
+                due > 0
+                  ? "danger-text"
+                  : "success-text"
+              }">
+                ${money(due)}
+              </td>
+
+              <td>
+
+                <button
+                  class="btn"
+                  onclick="collectCustomer('${customer.id}')"
+                >
+                  Payment
+                </button>
+
+                <button
+                  class="btn"
+                  onclick="openCustomer('${customer.id}')"
+                >
+                  Edit
+                </button>
+
+              </td>
+
+            </tr>
+            `;
+
+          }
+        ).join("")
+      : `
+        <tr>
+          <td colspan="5" class="empty">
+            No customers
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   SUPPLIERS
+   ========================= */
+
+function renderSuppliers(){
+
+  document.getElementById(
+    "suppliersTable"
+  ).innerHTML =
+    db.suppliers.length
+      ? db.suppliers.map(
+          supplier => {
+
+            const due =
+              supplierDue(supplier);
+
+
+            return `
+            <tr>
+
+              <td>
+                ${esc(supplier.name)}
+              </td>
+
+              <td>
+                ${esc(supplier.phone || "")}
+              </td>
+
+              <td>
+                ${money(
+                  supplier.openingPayable
+                )}
+              </td>
+
+              <td class="${
+                due > 0
+                  ? "danger-text"
+                  : "success-text"
+              }">
+                ${money(due)}
+              </td>
+
+              <td>
+
+                <button
+                  class="btn"
+                  onclick="paySupplier('${supplier.id}')"
+                >
+                  Payment
+                </button>
+
+                <button
+                  class="btn"
+                  onclick="openSupplier('${supplier.id}')"
+                >
+                  Edit
+                </button>
+
+              </td>
+
+            </tr>
+            `;
+
+          }
+        ).join("")
+      : `
+        <tr>
+          <td colspan="5" class="empty">
+            No suppliers
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   EXPENSES
+   ========================= */
+
+function renderExpenses(){
+
+  document.getElementById(
+    "expensesTable"
+  ).innerHTML =
+    db.expenses.length
+      ? db.expenses
+          .slice()
+          .reverse()
+          .map(
+            expense => `
+            <tr>
+
+              <td>
+                ${esc(expense.date)}
+              </td>
+
+              <td>
+                ${esc(expense.category)}
+              </td>
+
+              <td>
+                ${esc(expense.note || "")}
+              </td>
+
+              <td>
+                ${money(expense.amount)}
+              </td>
+
+              <td>
+                ${esc(expense.method)}
+              </td>
+
+            </tr>
+            `
+          ).join("")
+      : `
+        <tr>
+          <td colspan="5" class="empty">
+            No expenses
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   CASH BANK
+   ========================= */
+
+function renderMoney(){
+
+  document.getElementById(
+    "cashPage"
+  ).textContent =
+    money(cashBalance());
+
+
+  document.getElementById(
+    "bankPage"
+  ).textContent =
+    money(bankBalance());
+
+
+  const transactions = [
+
+    ...db.cashTransactions.map(
+      transaction => ({
+        ...transaction,
+        account:"Cash"
+      })
+    ),
+
+    ...db.bankTransactions.map(
+      transaction => ({
+        ...transaction,
+        account:"Bank"
+      })
+    )
+
+  ].sort(
+    (a,b) =>
+      String(b.date)
+        .localeCompare(
+          String(a.date)
+        )
+  );
+
+
+  document.getElementById(
+    "moneyTable"
+  ).innerHTML =
+    transactions.length
+      ? transactions.map(
+          transaction => `
+          <tr>
+
+            <td>
+              ${esc(transaction.date)}
+            </td>
+
+            <td>
+              ${transaction.account}
+            </td>
+
+            <td>
+              ${esc(transaction.type)}
+            </td>
+
+            <td>
+              ${esc(transaction.note || "")}
+            </td>
+
+            <td>
+              ${money(transaction.amount)}
+            </td>
+
+          </tr>
+          `
+        ).join("")
+      : `
+        <tr>
+          <td colspan="5" class="empty">
+            No transactions
+          </td>
+        </tr>
+      `;
+
+}
+
+
+/* =========================
+   ORDERS
+   ========================= */
+
+function renderOrders(){
+
+  const salesOrders =
+    db.salesOrders
+      .slice()
+      .reverse();
+
+
+  const purchaseOrders =
+    db.purchaseOrders
+      .slice()
+      .reverse();
+
+
+  document.getElementById(
+    "salesOrders"
+  ).innerHTML =
+    salesOrders.length
+      ? salesOrders.map(
+          order => `
+          <div
+            class="card"
+            style="margin-bottom:8px"
+          >
+
+            <b>
+              ${esc(order.id)}
+            </b>
+
+            <br>
+
+            <span class="muted">
+              ${esc(order.date)}
+            </span>
+
+            —
+
+            <span class="badge">
+              ${esc(order.status)}
+            </span>
+
+          </div>
+          `
+        ).join("")
+      : `
+        <div class="empty">
+          No sales orders
+        </div>
+      `;
+
+
+  document.getElementById(
+    "purchaseOrders"
+  ).innerHTML =
+    purchaseOrders.length
+      ? purchaseOrders.map(
+          order => `
+          <div
+            class="card"
+            style="margin-bottom:8px"
+          >
+
+            <b>
+              ${esc(order.id)}
+            </b>
+
+            <br>
+
+            <span class="muted">
+              ${esc(order.date)}
+            </span>
+
+            —
+
+            <span class="badge">
+              ${esc(order.status)}
+            </span>
+
+          </div>
+          `
+        ).join("")
+      : `
+        <div class="empty">
+          No purchase orders
+        </div>
+      `;
+
+}
+
+
+/* =========================
+   REPORTS
+   ========================= */
+
+function renderReports(){
+
+  const from =
+    document.getElementById(
+      "reportFrom"
+    )?.value ||
+    "0000-01-01";
+
+
+  const to =
+    document.getElementById(
+      "reportTo"
+    )?.value ||
+    "9999-12-31";
+
+
+  const saleFilter =
+    sale =>
+      sale.date.slice(0,10)
+      >= from &&
+      sale.date.slice(0,10)
+      <= to;
+
+
+  const purchaseFilter =
+    purchase =>
+      purchase.date.slice(0,10)
+      >= from &&
+      purchase.date.slice(0,10)
+      <= to;
+
+
+  const expenseFilter =
+    expense =>
+      expense.date
+      >= from &&
+      expense.date
+      <= to;
+
+
+  const sales =
+    totalSales(saleFilter);
+
+
+  const purchases =
+    totalPurchases(
+      purchaseFilter
+    );
+
+
+  const expenses =
+    totalExpenses(
+      expenseFilter
+    );
+
+
+  const gross =
+    grossProfit(
+      saleFilter
+    );
+
+
+  const net =
+    gross - expenses;
+
+
+  const stock =
+    db.products.reduce(
+      (total,product) =>
+        total +
+        productStock(product) *
+        safe(product.purchasePrice),
+      0
+    );
+
+
+  document.getElementById(
+    "rSales"
+  ).textContent =
+    money(sales);
+
+
+  document.getElementById(
+    "rPurchases"
+  ).textContent =
+    money(purchases);
+
+
+  document.getElementById(
+    "rExpenses"
+  ).textContent =
+    money(expenses);
+
+
+  document.getElementById(
+    "rGross"
+  ).textContent =
+    money(gross);
+
+
+  document.getElementById(
+    "rNet"
+  ).textContent =
+    money(net);
+
+
+  document.getElementById(
+    "rStock"
+  ).textContent =
+    money(stock);
+
+
+  const rows = [
+
+    ["Sales",sales],
+
+    ["Purchases",purchases],
+
+    ["Expenses",expenses],
+
+    ["Gross Profit",gross],
+
+    ["Net Profit",net],
+
+    ["Receivable",totalReceivable()],
+
+    ["Payable",totalPayable()],
+
+    ["Cash",cashBalance()],
+
+    ["Bank",bankBalance()],
+
+    ["Stock Value",stock]
+
+  ];
+
+
+  document.getElementById(
+    "reportDetails"
+  ).innerHTML =
+    rows.map(
+      row => `
+      <tr>
+
+        <td>
+          ${row[0]}
+        </td>
+
+        <td>
+          <b>
+            ${money(row[1])}
+          </b>
+        </td>
+
+      </tr>
+      `
+    ).join("");
+
+}
+
+
+/* =========================
+   MODAL
+   ========================= */
+
+function openModal(
+  title,
+  content
+){
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent = title;
+
+
+  document.getElementById(
+    "modalBody"
+  ).innerHTML = content;
+
+
+  document.getElementById(
+    "modal"
+  ).classList.add("show");
+
+}
+
+
+function closeModal(){
+
+  document.getElementById(
+    "modal"
+  ).classList.remove("show");
+
+}
+
+
+/* =========================
+   PRODUCT FORM
+   ========================= */
+
+function openProduct(id=""){
+
+  const product =
+    id
+      ? getProduct(id)
+      : {
+
+          name:"",
+          barcode:"",
+          category:"",
+          brand:"",
+          unit:"pcs",
+
+          purchasePrice:0,
+          sellingPrice:0,
+
+          openingStock:0,
+          minimumStock:0,
+
+          description:""
+
+        };
+
+
+  openModal(
+    id
+      ? "Edit Product"
+      : "Add Product",
+
+    `
+
+    <form
+      onsubmit="submitProduct(event,'${id}')"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Product Name *
+          </label>
+
+          <input
+            class="input"
+            name="name"
+            value="${esc(product.name)}"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Barcode
+          </label>
+
+          <input
+            class="input"
+            name="barcode"
+            value="${esc(product.barcode)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Category
+          </label>
+
+          <input
+            class="input"
+            name="category"
+            value="${esc(product.category)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Brand
+          </label>
+
+          <input
+            class="input"
+            name="brand"
+            value="${esc(product.brand)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Unit
+          </label>
+
+          <input
+            class="input"
+            name="unit"
+            value="${esc(product.unit)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Purchase Price
+          </label>
+
+          <input
+            class="input"
+            type="number"
+            min="0"
+            step="0.01"
+            name="purchasePrice"
+            value="${product.purchasePrice}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Selling Price
+          </label>
+
+          <input
+            class="input"
+            type="number"
+            min="0"
+            step="0.01"
+            name="sellingPrice"
+            value="${product.sellingPrice}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Opening Stock
+          </label>
+
+          <input
+            class="input"
+            type="number"
+            min="0"
+            step="0.01"
+            name="openingStock"
+            value="${product.openingStock}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Minimum Stock
+          </label>
+
+          <input
+            class="input"
+            type="number"
+            min="0"
+            step="0.01"
+            name="minimumStock"
+            value="${product.minimumStock}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Description
+          </label>
+
+          <textarea
+            class="textarea"
+            name="description"
+          >${esc(product.description)}</textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn primary"
+        >
+          Save Product
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitProduct(
+  event,
+  id
+){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  values.purchasePrice =
+    safe(values.purchasePrice);
+
+
+  values.sellingPrice =
+    safe(values.sellingPrice);
+
+
+  values.openingStock =
+    safe(values.openingStock);
+
+
+  values.minimumStock =
+    safe(values.minimumStock);
+
+
+  if(id){
+
+    Object.assign(
+      getProduct(id),
+      values
+    );
+
+  }else{
+
+    db.products.push({
+
+      id:uid("PROD"),
+
+      ...values
+
+    });
+
+  }
+
+
+  audit(
+    id
+      ? "product_update"
+      : "product_create",
+    id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Product saved successfully"
+  );
+
+}
+
+
+/* =========================
+   CUSTOMER FORM
+   ========================= */
+
+function openCustomer(id=""){
+
+  const customer =
+    id
+      ? getCustomer(id)
+      : {
+
+          name:"",
+          phone:"",
+          address:"",
+          openingDue:0
+
+        };
+
+
+  openModal(
+    id
+      ? "Edit Customer"
+      : "Add Customer",
+
+    `
+
+    <form
+      onsubmit="submitCustomer(event,'${id}')"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Name *
+          </label>
+
+          <input
+            class="input"
+            name="name"
+            value="${esc(customer.name)}"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Phone
+          </label>
+
+          <input
+            class="input"
+            name="phone"
+            value="${esc(customer.phone)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Address
+          </label>
+
+          <input
+            class="input"
+            name="address"
+            value="${esc(customer.address)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Opening Due
+          </label>
+
+          <input
+            class="input"
+            type="number"
+            min="0"
+            step=".01"
+            name="openingDue"
+            value="${customer.openingDue}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Save Customer
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitCustomer(
+  event,
+  id
+){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  values.openingDue =
+    safe(values.openingDue);
+
+
+  if(id){
+
+    Object.assign(
+      getCustomer(id),
+      values
+    );
+
+  }else{
+
+    db.customers.push({
+
+      id:uid("CUS"),
+
+      ...values
+
+    });
+
+  }
+
+
+  audit(
+    "customer_save",
+    id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Customer saved"
+  );
+
+}
+
+
+/* =========================
+   SUPPLIER
+   ========================= */
+
+function openSupplier(id=""){
+
+  const supplier =
+    id
+      ? getSupplier(id)
+      : {
+
+          name:"",
+          phone:"",
+          address:"",
+          openingPayable:0
+
+        };
+
+
+  openModal(
+    id
+      ? "Edit Supplier"
+      : "Add Supplier",
+
+    `
+
+    <form
+      onsubmit="submitSupplier(event,'${id}')"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Name *
+          </label>
+
+          <input
+            class="input"
+            name="name"
+            value="${esc(supplier.name)}"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Phone
+          </label>
+
+          <input
+            class="input"
+            name="phone"
+            value="${esc(supplier.phone)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Address
+          </label>
+
+          <input
+            class="input"
+            name="address"
+            value="${esc(supplier.address)}"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Opening Payable
+          </label>
+
+          <input
+            class="input"
+            type="number"
+            min="0"
+            step=".01"
+            name="openingPayable"
+            value="${supplier.openingPayable}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Save Supplier
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitSupplier(
+  event,
+  id
+){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  values.openingPayable =
+    safe(values.openingPayable);
+
+
+  if(id){
+
+    Object.assign(
+      getSupplier(id),
+      values
+    );
+
+  }else{
+
+    db.suppliers.push({
+
+      id:uid("SUP"),
+
+      ...values
+
+    });
+
+  }
+
+
+  audit(
+    "supplier_save",
+    id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Supplier saved"
+  );
+
+}
+
+
+/* =========================
+   SALE ROW
+   ========================= */
+
+function saleRow(item={}){
+
+  return `
+
+  <div
+    class="card sale-row"
+    style="margin:8px 0;padding:10px"
+  >
+
+    <div class="formgrid">
+
+      <div class="field">
+
+        <label>
+          Product
+        </label>
+
+        <select
+          class="select sale-product"
+          onchange="saleRecalc()"
+        >
+
+          <option value="">
+            Select product
+          </option>
+
+          ${
+            db.products
+              .map(
+                product => `
+                <option
+                  value="${product.id}"
+                  ${
+                    item.productId === product.id
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  ${esc(product.name)}
+                  — Stock:
+                  ${productStock(product)}
+                </option>
+                `
+              )
+              .join("")
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Quantity
+        </label>
+
+        <input
+          class="input sale-qty"
+          type="number"
+          min=".01"
+          step=".01"
+          value="${item.qty || 1}"
+          oninput="saleRecalc()"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Selling Price
+        </label>
+
+        <input
+          class="input sale-price"
+          type="number"
+          min="0"
+          step=".01"
+          value="${item.price || 0}"
+          oninput="saleRecalc()"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Total
+        </label>
+
+        <input
+          class="input sale-total"
+          readonly
+          value="${
+            safe(item.qty) *
+            safe(item.price)
+          }"
+        >
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="btn danger"
+      onclick="
+        this.closest('.sale-row').remove();
+        saleRecalc();
+      "
+    >
+      Remove
+    </button>
+
+  </div>
+
+  `;
+
+}
+
+
+function addSaleRow(){
+
+  document
+    .getElementById("saleItems")
+    .insertAdjacentHTML(
+      "beforeend",
+      saleRow()
+    );
+
+  saleRecalc();
+
+}
+
+
+/* =========================
+   NEW SALE
+   ========================= */
+
+function openSale(){
+
+  openModal(
+    "New Sale / POS",
+
+    `
+
+    <form
+      onsubmit="submitSale(event)"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Customer
+          </label>
+
+          <select
+            class="select"
+            id="saleCustomer"
+          >
+
+            <option value="">
+              Walk-in Customer
+            </option>
+
+            ${
+              db.customers
+                .map(
+                  customer => `
+                  <option value="${customer.id}">
+                    ${esc(customer.name)}
+                  </option>
+                  `
+                )
+                .join("")
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Payment Method
+          </label>
+
+          <select
+            class="select"
+            id="saleMethod"
+          >
+
+            <option value="cash">
+              Cash
+            </option>
+
+            <option value="bank">
+              Bank
+            </option>
+
+            <option value="mobile">
+              Mobile Banking
+            </option>
+
+            <option value="other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <h4>
+        Sale Items
+      </h4>
+
+
+      <div id="saleItems">
+
+        ${saleRow()}
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn"
+        onclick="addSaleRow()"
+      >
+        + Add Item
+      </button>
+
+
+      <div
+        class="formgrid"
+        style="margin-top:12px"
+      >
+
+        <div class="field">
+
+          <label>
+            Discount
+          </label>
+
+          <input
+            class="input"
+            id="saleDiscount"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="saleRecalc()"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Delivery Charge
+          </label>
+
+          <input
+            class="input"
+            id="saleDelivery"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="saleRecalc()"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Tax
+          </label>
+
+          <input
+            class="input"
+            id="saleTax"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="saleRecalc()"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Paid Amount
+          </label>
+
+          <input
+            class="input"
+            id="salePaid"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="saleRecalc()"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="totalbox">
+
+        <div class="totalrow">
+          <span>Subtotal</span>
+          <b id="saleSubtotal">৳0.00</b>
+        </div>
+
+        <div class="totalrow">
+          <span>Grand Total</span>
+          <b
+            class="grand"
+            id="saleGrand"
+          >
+            ৳0.00
+          </b>
+        </div>
+
+        <div class="totalrow">
+          <span>Due</span>
+          <b id="saleDue">৳0.00</b>
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Complete Sale
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+
+  saleRecalc();
+
+}
+
+
+/* =========================
+   SALE CALCULATION
+   ========================= */
+
+function saleRecalc(){
+
+  let subtotal = 0;
+
+
+  document
+    .querySelectorAll(".sale-row")
+    .forEach(row => {
+
+      const quantity =
+        safe(
+          row.querySelector(
+            ".sale-qty"
+          )?.value
+        );
+
+
+      const price =
+        safe(
+          row.querySelector(
+            ".sale-price"
+          )?.value
+        );
+
+
+      const total =
+        quantity * price;
+
+
+      const totalInput =
+        row.querySelector(
+          ".sale-total"
+        );
+
+
+      if(totalInput){
+
+        totalInput.value =
+          total.toFixed(2);
+
+      }
+
+
+      subtotal += total;
+
+    });
+
+
+  const discount =
+    safe(
+      document.getElementById(
+        "saleDiscount"
+      )?.value
+    );
+
+
+  const delivery =
+    safe(
+      document.getElementById(
+        "saleDelivery"
+      )?.value
+    );
+
+
+  const tax =
+    safe(
+      document.getElementById(
+        "saleTax"
+      )?.value
+    );
+
+
+  const paid =
+    safe(
+      document.getElementById(
+        "salePaid"
+      )?.value
+    );
+
+
+  const grandTotal =
+    Math.max(
+      0,
+      subtotal -
+      discount +
+      delivery +
+      tax
+    );
+
+
+  const due =
+    Math.max(
+      0,
+      grandTotal - paid
+    );
+
+
+  const subtotalElement =
+    document.getElementById(
+      "saleSubtotal"
+    );
+
+
+  const grandElement =
+    document.getElementById(
+      "saleGrand"
+    );
+
+
+  const dueElement =
+    document.getElementById(
+      "saleDue"
+    );
+
+
+  if(subtotalElement)
+    subtotalElement.textContent =
+      money(subtotal);
+
+
+  if(grandElement)
+    grandElement.textContent =
+      money(grandTotal);
+
+
+  if(dueElement)
+    dueElement.textContent =
+      money(due);
+
+}
+
+
+/* =========================
+   SUBMIT SALE
+   ========================= */
+
+function submitSale(event){
+
+  event.preventDefault();
+
+
+  const rows =
+    [
+      ...document.querySelectorAll(
+        ".sale-row"
+      )
+    ];
+
+
+  const items = [];
+
+  let subtotal = 0;
+
+
+  for(
+    const row of rows
+  ){
+
+    const productId =
+      row.querySelector(
+        ".sale-product"
+      ).value;
+
+
+    const quantity =
+      safe(
+        row.querySelector(
+          ".sale-qty"
+        ).value
+      );
+
+
+    const price =
+      safe(
+        row.querySelector(
+          ".sale-price"
+        ).value
+      );
+
+
+    if(
+      !productId ||
+      quantity <= 0
+    ){
+
+      toast(
+        "Product and valid quantity required"
+      );
+
+      return;
+
+    }
+
+
+    const product =
+      getProduct(productId);
+
+
+    if(!product){
+
+      toast(
+        "Product not found"
+      );
+
+      return;
+
+    }
+
+
+    const stock =
+      productStock(product);
+
+
+    if(
+      quantity > stock
+    ){
+
+      toast(
+        "Insufficient stock: " +
+        product.name
+      );
+
+      return;
+
+    }
+
+
+    items.push({
+
+      productId,
+
+      qty:quantity,
+
+      price
+
+    });
+
+
+    subtotal +=
+      quantity * price;
+
+  }
+
+
+  if(items.length === 0){
+
+    toast(
+      "Add at least one product"
+    );
+
+    return;
+
+  }
+
+
+  const discount =
+    safe(
+      document.getElementById(
+        "saleDiscount"
+      ).value
+    );
+
+
+  const delivery =
+    safe(
+      document.getElementById(
+        "saleDelivery"
+      ).value
+    );
+
+
+  const tax =
+    safe(
+      document.getElementById(
+        "saleTax"
+      ).value
+    );
+
+
+  const total =
+    Math.max(
+      0,
+      subtotal -
+      discount +
+      delivery +
+      tax
+    );
+
+
+  const paid =
+    safe(
+      document.getElementById(
+        "salePaid"
+      ).value
+    );
+
+
+  if(paid > total){
+
+    toast(
+      "Paid amount cannot exceed total"
+    );
+
+    return;
+
+  }
+
+
+  const sale = {
+
+    id:uid("SALE"),
+
+    invoiceNo:
+      "INV-" +
+      Date.now()
+        .toString()
+        .slice(-8),
+
+    date:
+      new Date()
+        .toISOString(),
+
+    customerId:
+      document.getElementById(
+        "saleCustomer"
+      ).value || null,
+
+    items,
+
+    subtotal,
+
+    discount,
+
+    deliveryCharge:
+      delivery,
+
+    tax,
+
+    total,
+
+    paid,
+
+    due:
+      Math.max(
+        0,
+        total - paid
+      ),
+
+    paymentMethod:
+      document.getElementById(
+        "saleMethod"
+      ).value,
+
+    status:"completed"
+
+  };
+
+
+  db.sales.push(sale);
+
+
+  db.invoices.push({
+
+    id:uid("INV"),
+
+    invoiceNo:
+      sale.invoiceNo,
+
+    date:
+      sale.date,
+
+    total:
+      sale.total,
+
+    paid:
+      sale.paid,
+
+    due:
+      sale.due,
+
+    saleId:
+      sale.id
+
+  });
+
+
+  audit(
+    "sale_create",
+    sale.id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Sale completed: " +
+    sale.invoiceNo
+  );
+
+
+  setTimeout(
+    () => printInvoice(
+      sale.id
+    ),
+    250
+  );
+
+}
+
+
+/* =========================
+   CANCEL SALE
+   ========================= */
+
+function cancelSale(id){
+
+  const sale =
+    db.sales.find(
+      item => item.id === id
+    );
+
+
+  if(!sale)
+    return;
+
+
+  if(
+    sale.status === "cancelled"
+  )
+    return;
+
+
+  if(
+    !confirm(
+      "Cancel this sale?"
+    )
+  )
+    return;
+
+
+  sale.status =
+    "cancelled";
+
+
+  audit(
+    "sale_cancel",
+    id
+  );
+
+
+  saveDB();
+
+
+  toast(
+    "Sale cancelled"
+  );
+
+}
+
+
+/* =========================
+   PRINT INVOICE
+   ========================= */
+
+function printInvoice(id){
+
+  const sale =
+    db.sales.find(
+      item => item.id === id
+    );
+
+
+  if(!sale)
+    return;
+
+
+  const rows =
+    sale.items
+      .map(
+        item => {
+
+          const product =
+            getProduct(
+              item.productId
+            );
+
+
+          return `
+          <tr>
+
+            <td>
+              ${esc(
+                product?.name || ""
+              )}
+            </td>
+
+            <td>
+              ${item.qty}
+            </td>
+
+            <td>
+              ${money(item.price)}
+            </td>
+
+            <td>
+              ${money(
+                item.qty *
+                item.price
+              )}
+            </td>
+
+          </tr>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  const popup =
+    window.open(
+      "",
+      "_blank",
+      "width=800,height=900"
+    );
+
+
+  if(!popup){
+
+    toast(
+      "Please allow popups to print"
+    );
+
+    return;
+
+  }
+
+
+  popup.document.write(`
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <title>
+        ${esc(sale.invoiceNo)}
+      </title>
+
+      <style>
+
+        body{
+          font-family:Arial,sans-serif;
+          max-width:760px;
+          margin:30px auto;
+          padding:20px;
+        }
+
+        h1,h2,h3{
+          margin:5px 0;
+        }
+
+        table{
+          width:100%;
+          border-collapse:collapse;
+          margin-top:20px;
+        }
+
+        th,td{
+          padding:9px;
+          border-bottom:1px solid #ddd;
+          text-align:left;
+        }
+
+        .right{
+          text-align:right;
+        }
+
+        .total{
+          font-size:20px;
+          font-weight:bold;
+        }
+
+        @media print{
+
+          body{
+            margin:0;
+            padding:10px;
+          }
+
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <h2>
+        ${esc(db.profile.name)}
+      </h2>
+
+      <div>
+        ${esc(db.profile.phone || "")}
+      </div>
+
+      <div>
+        ${esc(db.profile.address || "")}
+      </div>
+
+      <hr>
+
+      <h3>
+        Invoice:
+        ${esc(sale.invoiceNo)}
+      </h3>
+
+      <div>
+        Date:
+        ${esc(
+          sale.date.slice(0,16)
+        )}
+      </div>
+
+      <div>
+        Customer:
+        ${esc(
+          getCustomer(
+            sale.customerId
+          )?.name ||
+          "Walk-in"
+        )}
+      </div>
+
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Product
+            </th>
+
+            <th>
+              Qty
+            </th>
+
+            <th>
+              Price
+            </th>
+
+            <th>
+              Total
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${rows}
+
+        </tbody>
+
+      </table>
+
+
+      <div class="right">
+
+        <p>
+          Subtotal:
+          ${money(sale.subtotal)}
+        </p>
+
+        <p>
+          Discount:
+          ${money(sale.discount)}
+        </p>
+
+        <p>
+          Delivery:
+          ${money(sale.deliveryCharge)}
+        </p>
+
+        <p>
+          Tax:
+          ${money(sale.tax)}
+        </p>
+
+        <p class="total">
+          Grand Total:
+          ${money(sale.total)}
+        </p>
+
+        <p>
+          Paid:
+          ${money(sale.paid)}
+        </p>
+
+        <p>
+          Due:
+          ${money(sale.due)}
+        </p>
+
+      </div>
+
+      <hr>
+
+      <p>
+        Thank you for your business.
+      </p>
+
+      <script>
+
+        window.onload = function(){
+          window.print();
+        };
+
+      <\/script>
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  popup.document.close();
+
+}
+
+
+/* =========================
+   PURCHASE ROW
+   ========================= */
+
+function purchaseRow(){
+
+  return `
+
+  <div
+    class="card pur-row"
+    style="margin:8px 0;padding:10px"
+  >
+
+    <div class="formgrid">
+
+      <div class="field">
+
+        <label>
+          Product
+        </label>
+
+        <select
+          class="select pur-product"
+          onchange="purRecalc()"
+        >
+
+          <option value="">
+            Select Product
+          </option>
+
+          ${
+            db.products
+              .map(
+                product => `
+                <option value="${product.id}">
+                  ${esc(product.name)}
+                </option>
+                `
+              )
+              .join("")
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Quantity
+        </label>
+
+        <input
+          class="input pur-qty"
+          type="number"
+          min=".01"
+          step=".01"
+          value="1"
+          oninput="purRecalc()"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Purchase Price
+        </label>
+
+        <input
+          class="input pur-price"
+          type="number"
+          min="0"
+          step=".01"
+          value="0"
+          oninput="purRecalc()"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Total
+        </label>
+
+        <input
+          class="input pur-total"
+          readonly
+          value="0"
+        >
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="btn danger"
+      onclick="
+        this.closest('.pur-row').remove();
+        purRecalc();
+      "
+    >
+      Remove
+    </button>
+
+  </div>
+
+  `;
+
+}
+
+
+function addPurchaseRow(){
+
+  document
+    .getElementById("purItems")
+    .insertAdjacentHTML(
+      "beforeend",
+      purchaseRow()
+    );
+
+  purRecalc();
+
+}
+
+
+/* =========================
+   PURCHASE
+   ========================= */
+
+function openPurchase(){
+
+  openModal(
+    "New Purchase",
+
+    `
+
+    <form
+      onsubmit="submitPurchase(event)"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Supplier *
+          </label>
+
+          <select
+            class="select"
+            id="purSupplier"
+            required
+          >
+
+            <option value="">
+              Select Supplier
+            </option>
+
+            ${
+              db.suppliers
+                .map(
+                  supplier => `
+                  <option value="${supplier.id}">
+                    ${esc(supplier.name)}
+                  </option>
+                  `
+                )
+                .join("")
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Payment Method
+          </label>
+
+          <select
+            class="select"
+            id="purMethod"
+          >
+
+            <option value="cash">
+              Cash
+            </option>
+
+            <option value="bank">
+              Bank
+            </option>
+
+            <option value="mobile">
+              Mobile Banking
+            </option>
+
+            <option value="other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <h4>
+        Purchase Items
+      </h4>
+
+
+      <div id="purItems">
+
+        ${purchaseRow()}
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn"
+        onclick="addPurchaseRow()"
+      >
+        + Add Item
+      </button>
+
+
+      <div
+        class="formgrid"
+        style="margin-top:12px"
+      >
+
+        <div class="field">
+
+          <label>
+            Discount
+          </label>
+
+          <input
+            class="input"
+            id="purDiscount"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="purRecalc()"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Extra Cost
+          </label>
+
+          <input
+            class="input"
+            id="purExtra"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="purRecalc()"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Paid Amount
+          </label>
+
+          <input
+            class="input"
+            id="purPaid"
+            type="number"
+            min="0"
+            step=".01"
+            value="0"
+            oninput="purRecalc()"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="totalbox">
+
+        <div class="totalrow">
+          <span>Subtotal</span>
+          <b id="purSubtotal">৳0.00</b>
+        </div>
+
+        <div class="totalrow">
+          <span>Grand Total</span>
+          <b
+            class="grand"
+            id="purGrand"
+          >
+            ৳0.00
+          </b>
+        </div>
+
+        <div class="totalrow">
+          <span>Due</span>
+          <b id="purDue">৳0.00</b>
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Complete Purchase
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+
+  purRecalc();
+
+}
+
+
+/* =========================
+   PURCHASE CALCULATION
+   ========================= */
+
+function purRecalc(){
+
+  let subtotal = 0;
+
+
+  document
+    .querySelectorAll(".pur-row")
+    .forEach(row => {
+
+      const quantity =
+        safe(
+          row.querySelector(
+            ".pur-qty"
+          )?.value
+        );
+
+
+      const price =
+        safe(
+          row.querySelector(
+            ".pur-price"
+          )?.value
+        );
+
+
+      const total =
+        quantity * price;
+
+
+      const totalInput =
+        row.querySelector(
+          ".pur-total"
+        );
+
+
+      if(totalInput){
+
+        totalInput.value =
+          total.toFixed(2);
+
+      }
+
+
+      subtotal += total;
+
+    });
+
+
+  const discount =
+    safe(
+      document.getElementById(
+        "purDiscount"
+      )?.value
+    );
+
+
+  const extra =
+    safe(
+      document.getElementById(
+        "purExtra"
+      )?.value
+    );
+
+
+  const paid =
+    safe(
+      document.getElementById(
+        "purPaid"
+      )?.value
+    );
+
+
+  const grandTotal =
+    Math.max(
+      0,
+      subtotal -
+      discount +
+      extra
+    );
+
+
+  const due =
+    Math.max(
+      0,
+      grandTotal - paid
+    );
+
+
+  if(
+    document.getElementById(
+      "purSubtotal"
+    )
+  ){
+
+    document.getElementById(
+      "purSubtotal"
+    ).textContent =
+      money(subtotal);
+
+  }
+
+
+  if(
+    document.getElementById(
+      "purGrand"
+    )
+  ){
+
+    document.getElementById(
+      "purGrand"
+    ).textContent =
+      money(grandTotal);
+
+  }
+
+
+  if(
+    document.getElementById(
+      "purDue"
+    )
+  ){
+
+    document.getElementById(
+      "purDue"
+    ).textContent =
+      money(due);
+
+  }
+
+}
+
+
+/* =========================
+   SUBMIT PURCHASE
+   ========================= */
+
+function submitPurchase(event){
+
+  event.preventDefault();
+
+
+  const items = [];
+
+  let subtotal = 0;
+
+
+  document
+    .querySelectorAll(".pur-row")
+    .forEach(row => {
+
+      const productId =
+        row.querySelector(
+          ".pur-product"
+        ).value;
+
+
+      const quantity =
+        safe(
+          row.querySelector(
+            ".pur-qty"
+          ).value
+        );
+
+
+      const price =
+        safe(
+          row.querySelector(
+            ".pur-price"
+          ).value
+        );
+
+
+      if(
+        productId &&
+        quantity > 0
+      ){
+
+        items.push({
+
+          productId,
+
+          qty:quantity,
+
+          price
+
+        });
+
+
+        subtotal +=
+          quantity * price;
+
+      }
+
+    });
+
+
+  if(items.length === 0){
+
+    toast(
+      "Add at least one product"
+    );
+
+    return;
+
+  }
+
+
+  const supplierId =
+    document.getElementById(
+      "purSupplier"
+    ).value;
+
+
+  if(!supplierId){
+
+    toast(
+      "Select supplier"
+    );
+
+    return;
+
+  }
+
+
+  const discount =
+    safe(
+      document.getElementById(
+        "purDiscount"
+      ).value
+    );
+
+
+  const extra =
+    safe(
+      document.getElementById(
+        "purExtra"
+      ).value
+    );
+
+
+  const total =
+    Math.max(
+      0,
+      subtotal -
+      discount +
+      extra
+    );
+
+
+  const paid =
+    safe(
+      document.getElementById(
+        "purPaid"
+      ).value
+    );
+
+
+  if(paid > total){
+
+    toast(
+      "Paid cannot exceed total"
+    );
+
+    return;
+
+  }
+
+
+  const purchase = {
+
+    id:uid("PUR"),
+
+    date:
+      new Date()
+        .toISOString(),
+
+    supplierId,
+
+    items,
+
+    subtotal,
+
+    discount,
+
+    extraCost:extra,
+
+    total,
+
+    paid,
+
+    due:
+      Math.max(
+        0,
+        total - paid
+      ),
+
+    paymentMethod:
+      document.getElementById(
+        "purMethod"
+      ).value,
+
+    status:"completed"
+
+  };
+
+
+  db.purchases.push(
+    purchase
+  );
+
+
+  audit(
+    "purchase_create",
+    purchase.id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Purchase completed"
+  );
+
+}
+
+
+/* =========================
+   EXPENSE
+   ========================= */
+
+function openExpense(){
+
+  openModal(
+    "Add Expense",
+
+    `
+
+    <form
+      onsubmit="submitExpense(event)"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Category
+          </label>
+
+          <select
+            class="select"
+            name="category"
+          >
+
+            <option>Rent</option>
+            <option>Salary</option>
+            <option>Electricity</option>
+            <option>Transport</option>
+            <option>Delivery</option>
+            <option>Marketing</option>
+            <option>Maintenance</option>
+            <option>Other</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Amount *
+          </label>
+
+          <input
+            class="input"
+            name="amount"
+            type="number"
+            min="0"
+            step=".01"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Payment Method
+          </label>
+
+          <select
+            class="select"
+            name="method"
+          >
+
+            <option value="cash">
+              Cash
+            </option>
+
+            <option value="bank">
+              Bank
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Note
+          </label>
+
+          <input
+            class="input"
+            name="note"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Save Expense
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitExpense(event){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  values.amount =
+    safe(values.amount);
+
+
+  values.date =
+    today();
+
+
+  const expense = {
+
+    id:uid("EXP"),
+
+    ...values
+
+  };
+
+
+  db.expenses.push(
+    expense
+  );
+
+
+  audit(
+    "expense_create",
+    expense.id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Expense saved"
+  );
+
+}
+
+
+/* =========================
+   CASH / BANK TRANSACTION
+   ========================= */
+
+function openMoney(){
+
+  openModal(
+    "Cash / Bank Transaction",
+
+    `
+
+    <form
+      onsubmit="submitMoney(event)"
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Account
+          </label>
+
+          <select
+            class="select"
+            name="account"
+          >
+
+            <option value="cash">
+              Cash
+            </option>
+
+            <option value="bank">
+              Bank
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Type
+          </label>
+
+          <select
+            class="select"
+            name="type"
+          >
+
+            <option value="in">
+              Money In
+            </option>
+
+            <option value="out">
+              Money Out
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Amount
+          </label>
+
+          <input
+            class="input"
+            name="amount"
+            type="number"
+            min="0"
+            step=".01"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Note
+          </label>
+
+          <input
+            class="input"
+            name="note"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Save Transaction
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitMoney(event){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  values.amount =
+    safe(values.amount);
+
+
+  values.date =
+    today();
+
+
+  const transaction = {
+
+    id:uid("TX"),
+
+    ...values
+
+  };
+
+
+  if(
+    values.account === "cash"
+  ){
+
+    db.cashTransactions.push(
+      transaction
+    );
+
+  }else{
+
+    db.bankTransactions.push({
+
+      ...transaction,
+
+      type:
+        values.type === "in"
+          ? "deposit"
+          : "withdraw"
+
+    });
+
+  }
+
+
+  audit(
+    "money_transaction",
+    transaction.id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Transaction saved"
+  );
+
+}
+
+
+/* =========================
+   CUSTOMER PAYMENT
+   ========================= */
+
+function collectCustomer(id){
+
+  const customer =
+    getCustomer(id);
+
+
+  if(!customer)
+    return;
+
+
+  openPayment(
+    "customer_payment",
+    id,
+    customer.name,
+    customerDue(customer)
+  );
+
+}
+
+
+/* =========================
+   SUPPLIER PAYMENT
+   ========================= */
+
+function paySupplier(id){
+
+  const supplier =
+    getSupplier(id);
+
+
+  if(!supplier)
+    return;
+
+
+  openPayment(
+    "supplier_payment",
+    id,
+    supplier.name,
+    supplierDue(supplier)
+  );
+
+}
+
+
+/* =========================
+   PAYMENT MODAL
+   ========================= */
+
+function openPayment(
+  type,
+  id,
+  name,
+  maximum
+){
+
+  openModal(
+    type === "customer_payment"
+      ? "Customer Payment"
+      : "Supplier Payment",
+
+    `
+
+    <form
+      onsubmit="
+        submitPayment(
+          event,
+          '${type}',
+          '${id}',
+          ${maximum}
+        )
+      "
+    >
+
+      <p>
+
+        <b>
+          ${esc(name)}
+        </b>
+
+        <br>
+
+        Current Due:
+        ${money(maximum)}
+
+      </p>
+
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Payment Amount
+          </label>
+
+          <input
+            class="input"
+            name="amount"
+            type="number"
+            min="0"
+            max="${maximum}"
+            step=".01"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Payment Method
+          </label>
+
+          <select
+            class="select"
+            name="method"
+          >
+
+            <option value="cash">
+              Cash
+            </option>
+
+            <option value="bank">
+              Bank
+            </option>
+
+            <option value="mobile">
+              Mobile Banking
+            </option>
+
+            <option value="other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Save Payment
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitPayment(
+  event,
+  type,
+  partyId,
+  maximum
+){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  values.amount =
+    safe(values.amount);
+
+
+  if(
+    values.amount >
+    maximum
+  ){
+
+    toast(
+      "Payment exceeds current due"
+    );
+
+    return;
+
+  }
+
+
+  const payment = {
+
+    id:uid("PAY"),
+
+    date:today(),
+
+    amount:
+      values.amount,
+
+    method:
+      values.method,
+
+    type,
+
+    partyId
+
+  };
+
+
+  db.payments.push(
+    payment
+  );
+
+
+  audit(
+    type,
+    payment.id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Payment saved"
+  );
+
+}
+
+
+/* =========================
+   ORDERS
+   ========================= */
+
+function openOrder(type){
+
+  const sales =
+    type === "sales";
+
+
+  const parties =
+    sales
+      ? db.customers
+      : db.suppliers;
+
+
+  const statuses =
+    sales
+
+      ? [
+          "draft",
+          "confirmed",
+          "partially_delivered",
+          "completed",
+          "cancelled"
+        ]
+
+      : [
+          "draft",
+          "ordered",
+          "partially_received",
+          "received",
+          "completed",
+          "cancelled"
+        ];
+
+
+  openModal(
+
+    sales
+      ? "New Sales Order"
+      : "New Purchase Order",
+
+    `
+
+    <form
+      onsubmit="
+        submitOrder(
+          event,
+          '${type}'
+        )
+      "
+    >
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            ${sales ? "Customer" : "Supplier"}
+          </label>
+
+          <select
+            class="select"
+            name="partyId"
+          >
+
+            <option value="">
+              Select
+            </option>
+
+            ${
+              parties.map(
+                party => `
+                <option value="${party.id}">
+                  ${esc(party.name)}
+                </option>
+                `
+              ).join("")
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Status
+          </label>
+
+          <select
+            class="select"
+            name="status"
+          >
+
+            ${
+              statuses.map(
+                status => `
+                <option value="${status}">
+                  ${status}
+                </option>
+                `
+              ).join("")
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Note
+        </label>
+
+        <textarea
+          class="textarea"
+          name="note"
+        ></textarea>
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+        >
+          Save Order
+        </button>
+
+      </div>
+
+    </form>
+
+    `
+  );
+
+}
+
+
+function submitOrder(
+  event,
+  type
+){
+
+  event.preventDefault();
+
+
+  const values =
+    Object.fromEntries(
+      new FormData(
+        event.target
+      )
+    );
+
+
+  const order = {
+
+    id:
+      uid(
+        type === "sales"
+          ? "SO"
+          : "PO"
+      ),
+
+    date:
+      today(),
+
+    partyId:
+      values.partyId,
+
+    status:
+      values.status,
+
+    note:
+      values.note || "",
+
+    items:[]
+
+  };
+
+
+  if(type === "sales"){
+
+    db.salesOrders.push(
+      order
+    );
+
+  }else{
+
+    db.purchaseOrders.push(
+      order
+    );
+
+  }
+
+
+  audit(
+    type +
+    "_order_create",
+    order.id
+  );
+
+
+  saveDB();
+
+  closeModal();
+
+  toast(
+    "Order saved"
+  );
+
+}
+
+
+/* =========================
+   SETTINGS
+   ========================= */
+
+function renderSettings(){
+
+  document.getElementById(
+    "setName"
+  ).value =
+    db.profile.name || "";
+
+
+  document.getElementById(
+    "setPhone"
+  ).value =
+    db.profile.phone || "";
+
+
+  document.getElementById(
+    "setAddress"
+  ).value =
+    db.profile.address || "";
+
+
+  document.getElementById(
+    "setCurrency"
+  ).value =
+    db.settings.currency || "BDT";
+
+
+  document.getElementById(
+    "businessNameTop"
+  ).textContent =
+    db.profile.name || "";
+
+}
+
+
+function saveSettings(){
+
+  db.profile.name =
+    document.getElementById(
+      "setName"
+    ).value.trim()
+    ||
+    "Atik Business Hisab";
+
+
+  db.profile.phone =
+    document.getElementById(
+      "setPhone"
+    ).value;
+
+
+  db.profile.address =
+    document.getElementById(
+      "setAddress"
+    ).value;
+
+
+  db.profile.currency =
+    document.getElementById(
+      "setCurrency"
+    ).value;
+
+
+  db.settings.currency =
+    db.profile.currency;
+
+
+  saveDB();
+
+  toast(
+    "Settings saved"
+  );
+
+}
+
+
+/* =========================
+   BACKUP
+   ========================= */
+
+function backup(){
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          db,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href = url;
+
+  link.download =
+    "atik-business-hisab-" +
+    today() +
+    ".json";
+
+
+  link.click();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  toast(
+    "Backup downloaded"
+  );
+
+}
+
+
+/* =========================
+   RESTORE
+   ========================= */
+
+function restore(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file)
+    return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    () => {
+
+      try{
+
+        const data =
+          JSON.parse(
+            reader.result
+          );
+
+
+        if(
+          !confirm(
+            "Current data may be replaced. Continue?"
+          )
+        ){
+
+          return;
+
+        }
+
+
+        db = data;
+
+        saveDB();
+
+        toast(
+          "Backup restored"
+        );
+
+
+      }catch(error){
+
+        toast(
+          "Invalid JSON backup"
+        );
+
+      }
+
+    };
+
+
+  reader.readAsText(
+    file
+  );
+
+}
+
+
+/* =========================
+   CSV EXPORT
+   ========================= */
+
+function exportCSV(){
+
+  const rows = [
+
+    [
+      "Invoice",
+      "Date",
+      "Customer",
+      "Total",
+      "Paid",
+      "Due",
+      "Status"
+    ],
+
+    ...db.sales.map(
+      sale => [
+
+        sale.invoiceNo,
+
+        sale.date,
+
+        getCustomer(
+          sale.customerId
+        )?.name ||
+        "Walk-in",
+
+        sale.total,
+
+        sale.paid,
+
+        sale.due,
+
+        sale.status
+
+      ]
+    )
+
+  ];
+
+
+  const csv =
+    rows
+      .map(
+        row =>
+          row
+            .map(
+              value =>
+                `"${String(value ?? "")
+                  .replace(/"/g,'""')}"`
+            )
+            .join(",")
+      )
+      .join("\n");
+
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:"text/csv"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href = url;
+
+  link.download =
+    "sales-report-" +
+    today() +
+    ".csv";
+
+
+  link.click();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  toast(
+    "CSV exported"
+  );
+
+}
+
+
+/* =========================
+   INITIAL RENDER
+   ========================= */
+
+function renderAll(){
+
+  renderDashboard();
+
+  renderSales();
+
+  renderPurchases();
+
+  renderProducts();
+
+  renderCustomers();
+
+  renderSuppliers();
+
+  renderExpenses();
+
+  renderMoney();
+
+  renderOrders();
+
+  renderReports();
+
+  renderSettings();
+
+}
+
+
+/* =========================
+   START APP
+   ========================= */
+
+renderAll();
+
+</script>
+
+</body>
+</html>
