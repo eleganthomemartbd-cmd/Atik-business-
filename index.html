@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atik Business Hisab</title>
+  <style>
+    :root {
+      --primary: #635BFF;
+      --bg: #F4F5F7;
+      --card-bg: #FFFFFF;
+      --text: #333333;
+      --border: #E0E0E0;
+      --green: #28A745;
+      --red: #DC3545;
+      --yellow: #FFC107;
+    }
+    .dark-mode {
+      --bg: #121212;
+      --card-bg: #1E1E1E;
+      --text: #E0E0E0;
+      --border: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+    
+    /* Sidebar */
+    .sidebar { width: 250px; background: var(--card-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s; }
+    .sidebar-header { padding: 20px; font-size: 18px; font-weight: bold; color: var(--primary); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .nav-links { list-style: none; overflow-y: auto; flex: 1; }
+    .nav-links li a { display: block; padding: 12px 20px; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .nav-links li a:hover, .nav-links li a.active { background: var(--primary); color: white; }
+    
+    /* Main Content */
+    .main-container { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+    .top-nav { background: var(--card-bg); padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .content { padding: 20px; }
+    .page { display: none; }
+    .page.active { display: block; }
+    
+    /* UI Components */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .card { background: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .card h3 { font-size: 14px; margin-bottom: 8px; opacity: 0.8; }
+    .card p { font-size: 20px; font-weight: bold; }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .yellow { color: var(--yellow); }
+    .btn { background: var(--primary); color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-red { background: var(--red); }
+    
+    /* Table Styling */
+    .table-responsive { width: 100%; overflow-x: auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { background: rgba(99, 91, 255, 0.1); color: var(--primary); }
+    
+    /* Form Controls */
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 14px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--card-bg); color: var(--text); }
+    
+    /* Invoice Styles */
+    #invoice-view { background: white; color: black; padding: 40px; width: 100%; max-width: 800px; margin: auto; border: 1px solid #ccc; position: relative; }
+    .stamp { position: absolute; right: 50px; top: 150px; border: 3px double var(--green); color: var(--green); font-weight: bold; padding: 10px 20px; border-radius: 50%; transform: rotate(-15deg); text-transform: uppercase; }
+    .signatures { display: flex; justify-content: space-between; margin-top: 50px; }
+    .signature-line { border-top: 1px solid black; width: 150px; text-align: center; padding-top: 5px; }
+    
+    /* Login Overlay */
+    #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+    .login-box { background: var(--card-bg); padding: 30px; border-radius: 8px; border: 1px solid var(--border); width: 320px; text-align: center; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #invoice-view, #invoice-view * { visibility: visible; }
+      #invoice-view { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar { position: fixed; left: -250px; height: 100%; z-index: 99; }
+      .sidebar.open { left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="login-modal">
+    <div class="login-box">
+      <h2 style="color:var(--primary); margin-bottom: 20px;">লগইন</h2>
+      <div class="form-group">
+        <input type="email" id="login-email" placeholder="ইমেইল অ্যাড্রেস">
+      </div>
+      <div class="form-group">
+        <input type="password" id="login-pin" maxlength="4" placeholder="৪ সংখ্যার PIN">
+      </div>
+      <button class="btn" style="width:100%" onclick="handleLogin()">প্রবেশ করুন</button>
+      <p style="margin-top:15px; font-size: 12px; cursor:pointer;" onclick="alert('PIN রিসেট লিঙ্ক ইমেইলে পাঠানো হয়েছে।')">Forgot PIN?</p>
+    </div>
+  </div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span>Atik Hisab</span>
+      <button onclick="toggleSidebar()" style="background:none; border:none; color:var(--text); cursor:pointer;">✕</button>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" class="active" onclick="showPage('home')">🏠 Home</a></li>
+      <li><a href="#" onclick="showPage('sales')">🛒 বিক্রয় (Sales)</a></li>
+      <li><a href="#" onclick="showPage('products')">📦 পণ্য (Products)</a></li>
+      <li><a href="#" onclick="showPage('accounts')">👥 হিসাব (Accounts)</a></li>
+      <li><a href="#" onclick="showPage('bank')">🏦 ব্যাংক (Bank)</a></li>
+      <li><a href="#" onclick="showPage('invoice')">🧾 Invoice</a></li>
+      <li><a href="#" onclick="showPage('others')">🔄 অন্যান্য (Others)</a></li>
+      <li><a href="#" onclick="showPage('settings')">⚙️ Settings</a></li>
+    </ul>
+  </div>
+
+  <div class="main-container">
+    <div class="top-nav">
+      <button class="btn" onclick="toggleSidebar()">☰ Menu</button>
+      <button class="btn" onclick="toggleDarkMode()">🎨 Dark Mode</button>
+    </div>
+
+    <div class="content">
+      
+      <div id="home" class="page active">
+        <div class="grid">
+          <div class="card"><h3>হাতে আছে</h3><p class="green">৳ <span id="cash-hand">50,000</span></p></div>
+          <div class="card"><h3>ব্যাংকে আছে</h3><p class="green">৳ <span id="bank-bal">1,20,000</span></p></div>
+          <div class="card"><h3>গ্রাহকের বাকি</h3><p class="red">৳ <span id="cust-due">15,000</span></p></div>
+          <div class="card"><h3>আজকের বিক্রি</h3><p>৳ <span id="today-sale">12,500</span></p></div>
+          <div class="card"><h3>আজকের ক্রয়</h3><p>৳ <span id="today-buy">8,000</span></p></div>
+          <div class="card"><h3>আজকের খরচ</h3><p class="red">৳ <span id="today-exp">1,200</span></p></div>
+          <div class="card"><h3>আজকের লাভ</h3><p class="green">৳ <span id="today-profit">3,300</span></p></div>
+          <div class="card"><h3>কম স্টক</h3><p class="yellow"><span id="low-stock">4</span> টি</p></div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+          <button class="btn" onclick="showPage('sales')">+ নতুন বিক্রয়</button>
+          <button class="btn" onclick="showPage('products')">+ নতুন পণ্য</button>
+        </div>
+
+        <h3>সাম্প্রতিক বিক্রয়</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>তারিখ</th><th>কাস্টমার</th><th>মোট ৳</th><th>Paid</th><th>Due</th><th>স্ট্যাটাস</th></tr>
+            </thead>
+            <tbody id="recent-sales-table">
+              <tr><td>02/09/2026</td><td>রহিম আহমেদ</td><td>1,500</td><td>1,500</td><td>0</td><td class="green">Paid</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="sales" class="page">
+        <h2>নতুন বিক্রয়</h2>
+        <div class="grid" style="grid-template-columns: 2fr 1fr; margin-top:15px;">
+          <div class="card">
+            <div class="form-group">
+              <label>গ্রাহক নির্বাচন</label>
+              <select id="sale-customer"><option>সাধারণ কাস্টমার</option></select>
+            </div>
+            <div class="form-group">
+              <label>পণ্য নির্বাচন</label>
+              <select id="sale-product"><option>পণ্য A - ৳ 500 (Stock: 10)</option></select>
+            </div>
+            <div class="grid">
+              <div class="form-group"><label>Quantity</label><input type="number" id="sale-qty" value="1" oninput="calcSale()"></div>
+              <div class="form-group"><label>Selling Price</label><input type="number" id="sale-price" value="500" oninput="calcSale()"></div>
+            </div>
+            <div class="grid">
+              <div class="form-group"><label>Discount</label><input type="number" id="sale-discount" value="0" oninput="calcSale()"></div>
+              <div class="form-group"><label>Paid</label><input type="number" id="sale-paid" value="500" oninput="calcSale()"></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>পেমেন্ট সমাপনী</h3>
+            <div class="form-group" style="margin-top:10px;">
+              <label>Payment Method</label>
+              <select id="payment-method" onchange="toggleCheckInfo()">
+                <option value="cash">১. নগদ</option>
+                <option value="cash-sale">২. নগদ বিক্রি</option>
+                <option value="bank">৩. ব্যাংক ট্রান্সফার</option>
+                <option value="check">৪. চেক</option>
+              </select>
+            </div>
+            <div id="check-info" style="display:none;" class="form-group">
+              <input type="text" placeholder="চেক নম্বর" style="margin-bottom:5px;">
+              <input type="text" placeholder="ব্যাংকের নাম">
+            </div>
+            <hr style="margin: 10px 0; border-color:var(--border);">
+            <p style="font-size:14px;">Previous Due: ৳ <span id="sale-prev-due">200</span></p>
+            <p style="font-size:14px;">Current Due: ৳ <span id="sale-curr-due">0</span></p>
+            <p style="font-size:16px; margin-top:5px;" class="red">Total Due: ৳ <span id="sale-total-due">200</span></p>
+            <button class="btn" style="width:100%; margin-top:15px;" onclick="alert('বিক্রি সফল হয়েছে!')">কনফার্ম বিক্রয়</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="products" class="page">
+        <h2>পণ্য ব্যবস্থাপনা</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>Barcode</th><th>Product Name</th><th>Category</th><th>Buy Price</th><th>Sell Price</th><th>Stock</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>100123</td><td>পণ্য A</td><td>ইলেক্ট্রনিক্স</td><td>400</td><td>500</td><td>10</td><td class="green">In Stock</td></tr>
+              <tr><td>100124</td><td>পণ্য B</td><td>গার্মেন্টস</td><td>200</td><td>300</td><td>2</td><td class="red">Low Stock</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="accounts" class="page">
+        <h2>হিসাব খাতা</h2>
+        <div class="grid" style="margin-top: 15px;">
+          <div class="card"><h3>Customer Due List</h3><p class="red">৳ 15,000</p></div>
+          <div class="card"><h3>Supplier Payable</h3><p class="red">৳ 8,500</p></div>
+        </div>
+        <div style="margin-top:10px;">
+          <button class="btn">Due Collection</button>
+          <button class="btn btn-red">Supplier Payment</button>
+        </div>
+      </div>
+
+      <div id="bank" class="page">
+        <h2>ব্যাংক হিসাব</h2>
+        <div class="grid" style="margin-top: 15px;">
+          <div class="card"><h3>হাতে থাকা Cash</h3><p>৳ 50,000</p></div>
+          <div class="card"><h3>Bank Balance</h3><p>৳ 1,20,000</p></div>
+        </div>
+        <div class="card">
+          <h3>লেনদেন</h3>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn">Deposit</button>
+            <button class="btn btn-red">Withdrawal</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="invoice" class="page">
+        <button class="btn" onclick="window.print()" style="margin-bottom:15px;">Print Invoice</button>
+        <div id="invoice-view">
+          <div class="stamp">PAID</div>
+          <div style="display:flex; justify-content:space-between;">
+            <div>
+              <h1 style="color:var(--primary);">আতিক বিজনেস</h1>
+              <p>ঠিকানা: ঢাকা, বাংলাদেশ</p>
+              <p>মোবাইল: +8801700000000</p>
+              <p>ইমেইল: info@atikbusiness.com</p>
+            </div>
+            <div style="text-align:right;">
+              <h2>INVOICE</h2>
+              <p>Invoice #: INV-2026-001</p>
+              <p>Date: 02/09/2026</p>
+            </div>
+          </div>
+          <hr style="margin: 20px 0;">
+          <div>
+            <h3>Customer Info:</h3>
+            <p>নাম: রহিম আহমেদ</p>
+            <p>মোবাইল: 01800000000</p>
+          </div>
+          <table style="margin-top:20px; width:100%; border:1px solid #ccc;">
+            <thead>
+              <tr style="background:#f2f2f2;"><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>পণ্য A</td><td>2</td><td>500</td><td>1000</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:20px; text-align:right;">
+            <p>Sub Total: ৳ 1000</p>
+            <p>Paid: ৳ 1000</p>
+            <p>Current Due: ৳ 0</p>
+            <p>Previous Due: ৳ 200</p>
+            <p><strong>Total Due: ৳ 200</strong></p>
+          </div>
+          <p style="margin-top:15px;"><strong>টাকার পরিমাণ কথায়:</strong> এক হাজার টাকা মাত্র।</p>
+          <div class="signatures">
+            <div class="signature-line">গ্রাহকের স্বাক্ষর</div>
+            <div class="signature-line">বিক্রেতার স্বাক্ষর</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="others" class="page">
+        <h2>অন্যান্য ফিচারস</h2>
+        <div class="grid" style="margin-top:15px;">
+          <div class="card"><h3>Sales Return</h3></div>
+          <div class="card"><h3>Purchase Return</h3></div>
+          <div class="card"><h3>Sales Order</h3></div>
+          <div class="card"><h3>Purchase Order</h3></div>
+          <div class="card"><h3>Expense</h3></div>
+          <div class="card"><h3>Cash Reconcile</h3></div>
+          <div class="card"><h3>Stock Adjustment</h3></div>
+          <div class="card"><h3>Barcode Generator</h3></div>
+        </div>
+      </div>
+
+      <div id="settings" class="page">
+        <h2>Settings & Data Backup</h2>
+        <div class="card" style="margin-top:15px;">
+          <h3>Payment Methods Config</h3>
+          <label><input type="checkbox" checked> নগদ</label><br>
+          <label><input type="checkbox" checked> নগদ বিক্রি</label><br>
+          <label><input type="checkbox" checked> ব্যাংক ট্রান্সফার</label><br>
+          <label><input type="checkbox" checked> চেক</label>
+        </div>
+        <div class="card" style="margin-top:15px;">
+          <h3>Backup & Restore</h3>
+          <button class="btn" onclick="alert('JSON Downloaded')">JSON Backup</button>
+          <button class="btn" onclick="alert('CSV Exported')">CSV Export</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Navigation Control
+    function showPage(pageId) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      
+      const links = document.querySelectorAll('.nav-links a');
+      links.forEach(link => link.classList.remove('active'));
+      
+      if(window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    // Payment Info Toggle
+    function toggleCheckInfo() {
+      const method = document.getElementById('payment-method').value;
+      const checkInfo = document.getElementById('check-info');
+      if(method === 'check') {
+        checkInfo.style.display = 'block';
+      } else {
+        checkInfo.style.display = 'none';
+      }
+    }
+
+    // Calculation Logic
+    function calcSale() {
+      const qty = parseFloat(document.getElementById('sale-qty').value) || 0;
+      const price = parseFloat(document.getElementById('sale-price').value) || 0;
+      const discount = parseFloat(document.getElementById('sale-discount').value) || 0;
+      const paid = parseFloat(document.getElementById('sale-paid').value) || 0;
+      const prevDue = parseFloat(document.getElementById('sale-prev-due').innerText) || 0;
+
+      const totalBill = (qty * price) - discount;
+      const currDue = totalBill - paid;
+      const totalDue = prevDue + currDue;
+
+      document.getElementById('sale-curr-due').innerText = currDue > 0 ? currDue : 0;
+      document.getElementById('sale-total-due').innerText = totalDue;
+    }
+
+    // Authentication Simulation
+    function handleLogin() {
+      const email = document.getElementById('login-email').value;
+      const pin = document.getElementById('login-pin').value;
+
+      if(email && pin.length === 4) {
+        document.getElementById('login-modal').style.display = 'none';
+      } else {
+        alert('সঠিক ইমেইল এবং ৪ সংখ্যার PIN দিন।');
+      }
+    }
+  </script>
+</body>
+</html>
